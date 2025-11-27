@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SAEP - Sistema de Controle de Estoque</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h1>📦 SAEP</h1>
+                <p>Controle de Estoque</p>
+            </div>
+            <nav class="sidebar-nav">
+                <button class="nav-item active" data-section="dashboard">
+                    <span class="icon">📊</span>
+                    <span>Dashboard</span>
+                </button>
+                <button class="nav-item" data-section="produtos">
+                    <span class="icon">📱</span>
+                    <span>Produtos</span>
+                </button>
+                <button class="nav-item" data-section="estoque">
+                    <span class="icon">📦</span>
+                    <span>Estoque</span>
+                </button>
+                <button class="nav-item" data-section="categorias">
+                    <span class="icon">🏷️</span>
+                    <span>Categorias</span>
+                </button>
+                <button class="nav-item" data-section="fabricantes">
+                    <span class="icon">🏭</span>
+                    <span>Fabricantes</span>
+                </button>
+                <button class="nav-item" data-section="ficha-tecnica">
+                    <span class="icon">📋</span>
+                    <span>Ficha Técnica</span>
+                </button>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Header -->
+            <header class="top-header">
+                <div class="header-left">
+                    <h2 id="pageTitle">Dashboard</h2>
+                </div>
+                <div class="header-right">
+                    <input type="text" id="searchInput" class="search-input" placeholder="🔍 Buscar...">
+                    <button class="btn-icon" id="notificationBtn">
+                        🔔
+                        <span class="notification-badge" id="notificationBadge">0</span>
+                    </button>
+                </div>
+            </header>
+
+            <!-- Sections Container -->
+            <div class="sections-container">
+                <!-- Dashboard Section -->
+                <section id="dashboard" class="section active">
+                    <div class="dashboard-grid">
+                        <div class="stat-card">
+                            <div class="stat-header">
+                                <h3>Total de Produtos</h3>
+                                <span class="stat-icon">📱</span>
+                            </div>
+                            <div class="stat-value" id="totalProdutos">0</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-header">
+                                <h3>Valor Total</h3>
+                                <span class="stat-icon">💰</span>
+                            </div>
+                            <div class="stat-value" id="valorTotal">R$ 0,00</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-header">
+                                <h3>Alertas</h3>
+                                <span class="stat-icon">⚠️</span>
+                            </div>
+                            <div class="stat-value alert" id="alertasCriticos">0</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-header">
+                                <h3>Categorias</h3>
+                                <span class="stat-icon">🏷️</span>
+                            </div>
+                            <div class="stat-value" id="totalCategorias">0</div>
+                        </div>
+                    </div>
+
+                    <div class="dashboard-section">
+                        <h3>⚠️ Produtos com Estoque Baixo</h3>
+                        <div id="alertasContainer" class="alerts-list">
+                            <p class="empty-state">Carregando...</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Produtos Section -->
+                <section id="produtos" class="section">
+                    <div class="section-header">
+                        <h2>Gerenciar Produtos</h2>
+                        <button class="btn btn-primary" id="btnNovoProduto">➕ Novo Produto</button>
+                    </div>
+                    <div class="filters-bar">
+                        <input type="text" id="filterProdutos" class="filter-input" placeholder="Filtrar por nome...">
+                        <select id="filterCategoria" class="filter-select">
+                            <option value="">Todas as categorias</option>
+                        </select>
+                    </div>
+                    <div id="produtosContainer" class="products-grid">
+                        <p class="empty-state">Carregando...</p>
+                    </div>
+                </section>
+
+                <!-- Estoque Section -->
+                <section id="estoque" class="section">
+                    <div class="section-header">
+                        <h2>Gerenciar Estoque</h2>
+                        <button class="btn btn-primary" id="btnNovoEstoque">➕ Nova Movimentação</button>
+                    </div>
+                    <div id="estoqueContainer" class="table-responsive">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Produto</th>
+                                    <th>Quantidade</th>
+                                    <th>Mínimo</th>
+                                    <th>Status</th>
+                                    <th>Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody id="estoqueTableBody">
+                                <tr><td colspan="5" class="empty-state">Carregando...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- Categorias Section -->
+                <section id="categorias" class="section">
+                    <div class="section-header">
+                        <h2>Gerenciar Categorias</h2>
+                        <button class="btn btn-primary" id="btnNovaCategoria">➕ Nova Categoria</button>
+                    </div>
+                    <div id="categoriasContainer" class="cards-grid">
+                        <p class="empty-state">Carregando...</p>
+                    </div>
+                </section>
+
+                <!-- Fabricantes Section -->
+                <section id="fabricantes" class="section">
+                    <div class="section-header">
+                        <h2>Gerenciar Fabricantes</h2>
+                        <button class="btn btn-primary" id="btnNovoFabricante">➕ Novo Fabricante</button>
+                    </div>
+                    <div id="fabricantesContainer" class="cards-grid">
+                        <p class="empty-state">Carregando...</p>
+                    </div>
+                </section>
+
+                <!-- Ficha Técnica Section -->
+                <section id="ficha-tecnica" class="section">
+                    <div class="section-header">
+                        <h2>Gerenciar Fichas Técnicas</h2>
+                        <button class="btn btn-primary" id="btnNovaFichaTecnica">➕ Nova Ficha Técnica</button>
+                    </div>
+                    <div class="filters-bar">
+                        <select id="filterProdutoFicha" class="filter-select">
+                            <option value="">Selecione um produto</option>
+                        </select>
+                    </div>
+                    <div id="fichaTecnicaContainer" class="specs-grid">
+                        <p class="empty-state">Selecione um produto</p>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modal Overlay -->
+    <div id="modalOverlay" class="modal-overlay"></div>
+
+    <!-- Modal Produto -->
+    <div id="modalProduto" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalProdutoTitle">Novo Produto</h2>
+                <button class="btn-close">&times;</button>
+            </div>
+            <form id="formProduto" class="form">
+                <div class="form-group">
+                    <label>Nome *</label>
+                    <input type="text" name="nome" required>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Preço *</label>
+                        <input type="number" name="preco" step="0.01" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Estoque *</label>
+                        <input type="number" name="estoque" required>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Categoria *</label>
+                        <select name="idcategoria" required></select>
+                    </div>
+                    <div class="form-group">
+                        <label>Fabricante *</label>
+                        <select name="idfabricante" required></select>
+                    </div>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal('modalProduto')">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Salvar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal Estoque -->
+    <div id="modalEstoque" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Gerenciar Estoque</h2>
+                <button class="btn-close">&times;</button>
+            </div>
+            <form id="formEstoque" class="form">
+                <div class="form-group">
+                    <label>Produto *</label>
+                    <select name="idProduto" required></select>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Quantidade Atual *</label>
+                        <input type="number" name="quantidadeAtual" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Estoque Mínimo *</label>
+                        <input type="number" name="estoqueMinimo" required>
+                    </div>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal('modalEstoque')">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Salvar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal Categoria -->
+    <div id="modalCategoria" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Nova Categoria</h2>
+                <button class="btn-close">&times;</button>
+            </div>
+            <form id="formCategoria" class="form">
+                <div class="form-group">
+                    <label>Nome *</label>
+                    <input type="text" name="nomecategoria" required>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal('modalCategoria')">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Salvar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal Fabricante -->
+    <div id="modalFabricante" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Novo Fabricante</h2>
+                <button class="btn-close">&times;</button>
+            </div>
+            <form id="formFabricante" class="form">
+                <div class="form-group">
+                    <label>Nome *</label>
+                    <input type="text" name="nomefabricante" required>
+                </div>
+                <div class="form-group">
+                    <label>País de Origem *</label>
+                    <input type="text" name="paisorigem" required>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal('modalFabricante')">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Salvar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal Ficha Técnica -->
+    <div id="modalFichaTecnica" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Nova Ficha Técnica</h2>
+                <button class="btn-close">&times;</button>
+            </div>
+            <form id="formFichaTecnica" class="form">
+                <div class="form-group">
+                    <label>Produto *</label>
+                    <select name="produtoId" required></select>
+                </div>
+                <div class="form-group">
+                    <label>Especificação *</label>
+                    <input type="text" name="especificacao" placeholder="Ex: Peso, Dimensões" required>
+                </div>
+                <div class="form-group">
+                    <label>Valor *</label>
+                    <input type="text" name="valor" placeholder="Ex: 500g, 10x10cm" required>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal('modalFichaTecnica')">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Salvar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Toast -->
+    <div id="toast" class="toast"></div>
+
+    <script src="app.js"></script>
+</body>
+</html>
